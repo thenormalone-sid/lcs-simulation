@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LCS Visualization</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>Longest Common Subsequence Visualizer</h1>
+    <div class="input-section">
+      <input type="text" id="string1" placeholder="Enter String 1" />
+      <input type="text" id="string2" placeholder="Enter String 2" />
+      <button id="start">Start</button>
+    </div>
+
+    <div id="controls" class="controls hidden">
+      <button id="nextStep">Next Step</button>
+      <button id="playPause">Play</button>
+      <button id="reset">Reset</button>
+      <button id="muteToggle">🔊</button>
+    </div>
+
+    <div id="gridContainer" class="grid-container"></div>
+
+    <div id="lcsOutput" class="lcs-output hidden"></div>
+  </div>
+
+  <audio id="matchSound" src="sounds/match.mp3"></audio>
+  <audio id="fillSound" src="sounds/fill.mp3"></audio>
+  <audio id="traceSound" src="sounds/trace.mp3"></audio>
+
+  <script src="script.js"></script>
+</body>
+</html>
+Moved index.html to root for GitHub Pages
