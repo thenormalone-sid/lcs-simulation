@@ -1,5 +1,3 @@
-// script.js
-
 let matrix = [];
 let arrows = [];
 let i = 0, j = 0, step = 0;
@@ -44,15 +42,32 @@ function initGrid(a, b) {
   lcsStr = "";
   matrix = Array.from({ length: b.length + 1 }, () => Array(a.length + 1).fill(0));
   arrows = Array.from({ length: b.length + 1 }, () => Array(a.length + 1).fill(""));
-  gridContainer.style.gridTemplateColumns = `repeat(${a.length + 1}, 40px)`;
-  for (let r = 0; r <= b.length; r++) {
-    for (let c = 0; c <= a.length; c++) {
+
+  gridContainer.style.gridTemplateColumns = `repeat(${a.length + 2}, 40px)`;
+
+  for (let r = 0; r <= b.length + 1; r++) {
+    for (let c = 0; c <= a.length + 1; c++) {
       const cell = document.createElement("div");
       cell.className = "grid-cell";
-      cell.id = `cell-${r}-${c}`;
+
+      if (r === 0 && c === 0) {
+        cell.textContent = "";
+      } else if (r === 0 && c > 1) {
+        cell.textContent = a[c - 2];
+        cell.style.fontWeight = "bold";
+      } else if (c === 0 && r > 1) {
+        cell.textContent = b[r - 2];
+        cell.style.fontWeight = "bold";
+      } else if (r > 0 && c > 0) {
+        const gridR = r - 1;
+        const gridC = c - 1;
+        cell.id = `cell-${gridR}-${gridC}`;
+      }
+
       gridContainer.appendChild(cell);
     }
   }
+
   controls.classList.remove("hidden");
   lcsOutput.classList.add("hidden");
   runStep();
@@ -61,6 +76,7 @@ function initGrid(a, b) {
 function runStep() {
   const a = string1Input.value;
   const b = string2Input.value;
+
   if (i >= b.length + 1) {
     stop();
     traceLCS(a, b);
@@ -68,7 +84,7 @@ function runStep() {
   }
 
   const cell = document.getElementById(`cell-${i}-${j}`);
-  cell.classList.remove("match", "trace");
+  if (cell) cell.classList.remove("match", "trace");
 
   if (i === 0 || j === 0) {
     matrix[i][j] = 0;
@@ -77,7 +93,7 @@ function runStep() {
     matrix[i][j] = matrix[i - 1][j - 1] + 1;
     arrows[i][j] = "diagonal";
     if (soundEnabled) matchSound.play();
-    cell.classList.add("match");
+    if (cell) cell.classList.add("match");
   } else {
     if (matrix[i - 1][j] >= matrix[i][j - 1]) {
       matrix[i][j] = matrix[i - 1][j];
@@ -89,8 +105,10 @@ function runStep() {
     if (soundEnabled) fillSound.play();
   }
 
-  cell.textContent = matrix[i][j];
-  if (arrows[i][j]) addArrow(cell, arrows[i][j]);
+  if (cell) {
+    cell.textContent = matrix[i][j];
+    if (arrows[i][j]) addArrow(cell, arrows[i][j]);
+  }
 
   j++;
   if (j > string1Input.value.length) {
@@ -139,7 +157,7 @@ function traceLCS(a, b) {
 
   while (x > 0 && y > 0) {
     const cell = document.getElementById(`cell-${x}-${y}`);
-    cell.classList.add("trace");
+    if (cell) cell.classList.add("trace");
     if (soundEnabled) traceSound.play();
 
     if (a[y - 1] === b[x - 1]) {
@@ -156,5 +174,3 @@ function traceLCS(a, b) {
   lcsOutput.textContent = `LCS: ${result}`;
   lcsOutput.classList.remove("hidden");
 }
-
-shavac
